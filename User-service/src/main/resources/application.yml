@@ -1,0 +1,17 @@
+server:
+  port: 4085
+
+
+spring:
+  application:
+    name: USER-SERVICE
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:4086/eureka/
+  instance:
+    hostname: localhost
+
+
