@@ -15,6 +15,7 @@ import java.util.List;
 public class ProductResource {
 
 
+
     private ProductService productService;
 
     public ProductResource(ProductService productService) {
@@ -33,7 +34,7 @@ public class ProductResource {
         return productService.getById(productId);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/getall")
     public List<Product> getAll() {
         log.info("Inside getAll method of ProductResource");
         return productService.getAll();

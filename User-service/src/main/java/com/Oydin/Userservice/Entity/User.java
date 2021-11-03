@@ -3,9 +3,10 @@ package com.Oydin.Userservice.Entity;
 
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class User  {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer userId;
