@@ -1,7 +1,7 @@
 package com.Oydin.Userservice.Controller;
 
 import com.Oydin.Userservice.Entity.User;
-import com.Oydin.Userservice.VO.ResponseListTemplateVO;
+import com.Oydin.Userservice.VO.Product;
 import com.Oydin.Userservice.VO.ResponseTemplateVO;
 import com.Oydin.Userservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 @Slf4j
-public class UserResource
+public class UserResource<userId>
 {
 
     @Autowired
@@ -27,23 +27,20 @@ public class UserResource
         return userService.createUser(user);
     }
     @PostMapping("/createuserandproduct")
-    public ResponseTemplateVO createUserAndProduct(@RequestBody User user,
-                                                   @RequestParam Integer productId ,
-                                                   @RequestParam String productName,
-                                                   @RequestParam Double price){
+    public ResponseTemplateVO createUserAndProduct(@RequestBody ResponseTemplateVO templateVO){
         log.info("Inside createUserAndProduct method of UserResource");
-        return userService.saveUserAndProduct(user,productId,productName,price);
+        return userService.saveUserAndProduct(templateVO);
     }
     @GetMapping("/{userId}")
-    public ResponseTemplateVO getUserWithProduct(@PathVariable Integer userId){
+    public ResponseTemplateVO getUserWithProduct(@PathVariable  Integer userId){
         log.info("Inside getUserWithProduct method of UserResource");
         return userService.getUserWithProduct(userId);
     }
-    @GetMapping("/getall")
-    public void getAllUsersWithProducts(){
-        log.info("Inside getAll method of UserResource");
-        userService.getAllUsersWithProducts();
-    }
+//    @GetMapping("/getall")
+//    public ResponseTemplateVO getAllUsersWithProducts(){
+//        log.info("Inside getAll method of UserResource");
+//       return userService.getAllUsersWithProducts();
+//    }
 
     @GetMapping("/all")
     public List<User> getAll(){
@@ -51,17 +48,27 @@ public class UserResource
         return userService.getAll();
     }
 
-    @PutMapping("/update/{userId}")
-    public User     userUpdate (@RequestBody User user,@PathVariable Integer userId){
+    @PutMapping("/updateUserAndProduct")
+    public ResponseTemplateVO updateUserAndProduct(@RequestBody ResponseTemplateVO templateVO){
+        return userService.updateUserAndProduct(templateVO);
+    }
+
+
+
+    @PutMapping("userupdate/{userId}")
+    public User userUpdate(@RequestBody User user, @PathVariable Integer userId){
         log.info("Inside userUpdate method of UserResource");
-        User user1 = userService.update (user,userId);
+        User user1 = userService.update(user,userId);
         return user1;
     }
+
     @DeleteMapping("/delete/{userId}")
     public void delete (@PathVariable Integer userId){
         log.info("Inside delete method of UserResource");
         userService.deleteUser(userService.getById(userId));
     }
+
+
     @DeleteMapping("/deleteuserandproduct/{userId}")
         public ResponseTemplateVO deleteUserAndProduct(@PathVariable User userId){
         log.info("");

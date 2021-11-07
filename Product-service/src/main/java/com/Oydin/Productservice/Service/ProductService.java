@@ -23,9 +23,7 @@ public class ProductService {
         return productRepository.findById(productId).get();
     }
     public List<Product> getAll() { return productRepository.findAll(); }
-//    public Product getByName(String productName) {
-//        return productRepository.findByName(productName);
-//    }
+
     public Product updateProduct(Product product){
         Product product1 = productRepository.save(product);
         product1.setProductId(product.getProductId());

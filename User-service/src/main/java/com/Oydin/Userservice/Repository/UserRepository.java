@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 @EnableJpaRepositories
 public interface UserRepository extends JpaRepository<User,Integer> {
     User findByUserId(Integer userId);
-    User deleteUser(User user);
+
 
 }
