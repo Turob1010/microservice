@@ -3,6 +3,7 @@ package com.Oydin.Userservice.service;
 import com.Oydin.Userservice.Entity.User;
 import com.Oydin.Userservice.Repository.UserRepository;
 import com.Oydin.Userservice.VO.Product;
+import com.Oydin.Userservice.VO.ResponseListTemplate;
 import com.Oydin.Userservice.VO.ResponseTemplateVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -24,6 +25,7 @@ public class UserService {
     private UserRepository userRepository;
 
     ResponseTemplateVO vo = new ResponseTemplateVO();
+    ResponseListTemplate voList = new ResponseListTemplate();
 
     public User createUser (User user){
         return userRepository.save(user);
@@ -74,46 +76,39 @@ public class UserService {
         vo.setProduct(product);
         return vo;
     }
-        public ResponseTemplateVO  getAllUsersWithProducts(){
+        public ResponseListTemplate  getAllUsersWithProducts(){
         List<User> users = userRepository.findAll();
        String GET_ALL_PRODUCT =  "http://localhost:4084/products/getall";
-    Product[] list = restTemplate.getForObject(GET_ALL_PRODUCT, Product[].class);
+    Product[] products = restTemplate.getForObject(GET_ALL_PRODUCT, Product[].class);
+    voList.setUsers(users);
+    voList.setProducts(List.of(products));
 
-    vo.setUser((User) users);
 
-
-    return vo;
+    return voList;
     }
 
     public ResponseTemplateVO updateUserAndProduct(ResponseTemplateVO vo){
-        User updateUser = new User();
         Product updateInfo = new Product();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
 
-
-        // Data attached to the request.
         HttpEntity<Product> requestBody = new HttpEntity<>(updateInfo, headers);
 
-        // Send request with PUT method.
         restTemplate.exchange("http://localhost:4084/products/update", HttpMethod.PUT, requestBody, Product.class);
 
         String resourceUrl = "http://localhost:4084/products/"  + updateInfo.getProductId();
         Product p = restTemplate.getForObject(resourceUrl, Product.class);
 
         vo.setProduct(p);
-//        vo.setUser(update());
+//
         return vo;
     }
-    public ResponseTemplateVO deleteUserAndProduct(User user){
-        Product product = new Product();
+    public void  deleteUserAndProduct(User user){
         userRepository.delete(user);
         String productD = "http://localhost:4084/products/" + user.getProductId();
         restTemplate.delete(productD);
-        vo.setUser(user);
-        vo.setProduct(vo.getProduct());
 
-        return vo ;
+
     }
 
 

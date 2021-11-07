@@ -16,14 +16,8 @@ public class UserServiceApplication {
 		SpringApplication.run(UserServiceApplication.class, args);
 	}
 
-	@Bean(name = "restTemplate")
-	@LoadBalanced
-	public RestTemplate loadBalnced(){
-		return new RestTemplate();
-	}
-
-	@Primary
 	@Bean
+	@LoadBalanced
 	public RestTemplate restTemplate(){
 		return new RestTemplate();
 	}

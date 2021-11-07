@@ -1,11 +1,11 @@
 package com.Oydin.Userservice.Controller;
 
 import com.Oydin.Userservice.Entity.User;
-import com.Oydin.Userservice.VO.Product;
 import com.Oydin.Userservice.VO.ResponseTemplateVO;
 import com.Oydin.Userservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -70,9 +70,10 @@ public class UserResource<userId>
 
 
     @DeleteMapping("/deleteuserandproduct/{userId}")
-        public ResponseTemplateVO deleteUserAndProduct(@PathVariable User userId){
+        public ResponseEntity deleteUserAndProduct(@PathVariable Integer userId){
         log.info("");
-        return userService.deleteUserAndProduct(userId);
+         userService.deleteUserAndProduct(userService.getById(userId));
+           return  ResponseEntity.ok("jygjh");
     }
 
 }
