@@ -1,14 +1,14 @@
 package com.Oydin.Productservice.Controller;
-
-import antlr.collections.List;
 import com.Oydin.Productservice.Entity.Product;
 import com.Oydin.Productservice.Service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
-@RequestMapping("products")
+@RequestMapping("/products")
 @Slf4j
 public class ProductResource {
 
@@ -32,11 +32,11 @@ public class ProductResource {
         return productService.getById(productId);
     }
 
-//    @GetMapping("/getall")
-//    public List<Product> gerAll() {
-//        log.info("Inside getAll method of ProductResource");
-//        return productService.getAll();
-//    }
+    @GetMapping("/getall")
+    public List<Product> gerAll() {
+        log.info("Inside getAll method of ProductResource");
+        return productService.getAll();
+    }
 
 
     @PutMapping("/update")
