@@ -20,7 +20,7 @@ public class ProductService {
         return productRepository.save(product);
     }
     public Product getById(Integer productId){
-        return productRepository.getById(productId);
+        return productRepository.findById(productId).get();
     }
     public List<Product> getAll() { return productRepository.findAll(); }
 

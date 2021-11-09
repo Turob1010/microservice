@@ -1,6 +1,7 @@
 package com.Oydin.Userservice.Controller;
 
 import com.Oydin.Userservice.Entity.User;
+import com.Oydin.Userservice.VO.ResponseListTemplate;
 import com.Oydin.Userservice.VO.ResponseTemplateVO;
 import com.Oydin.Userservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 @Slf4j
-public class UserResource<userId>
+public class UserResource
 {
 
     @Autowired
@@ -29,6 +30,7 @@ public class UserResource<userId>
     @PostMapping("/createuserandproduct")
     public ResponseTemplateVO createUserAndProduct(@RequestBody ResponseTemplateVO templateVO){
         log.info("Inside createUserAndProduct method of UserResource");
+
         return userService.saveUserAndProduct(templateVO);
     }
     @GetMapping("/{userId}")
@@ -36,11 +38,11 @@ public class UserResource<userId>
         log.info("Inside getUserWithProduct method of UserResource");
         return userService.getUserWithProduct(userId);
     }
-//    @GetMapping("/getall")
-//    public ResponseTemplateVO getAllUsersWithProducts(){
-//        log.info("Inside getAll method of UserResource");
-//       return userService.getAllUsersWithProducts();
-//    }
+    @GetMapping("/getall")
+    public ResponseListTemplate getAllUsersWithProducts(){
+        log.info("Inside getAll method of UserResource");
+       return userService.getAllUsersWithProducts();
+    }
 
     @GetMapping("/all")
     public List<User> getAll(){
@@ -50,6 +52,7 @@ public class UserResource<userId>
 
     @PutMapping("/updateUserAndProduct")
     public ResponseTemplateVO updateUserAndProduct(@RequestBody ResponseTemplateVO templateVO){
+        log.info("Inside updateUserAndProduct method of UserResource");
         return userService.updateUserAndProduct(templateVO);
     }
 
@@ -71,9 +74,9 @@ public class UserResource<userId>
 
     @DeleteMapping("/deleteuserandproduct/{userId}")
         public ResponseEntity deleteUserAndProduct(@PathVariable Integer userId){
-        log.info("");
+        log.info("Inside deleteUserAndProduct method of UserResource");
          userService.deleteUserAndProduct(userService.getById(userId));
-           return  ResponseEntity.ok("jygjh");
+           return  ResponseEntity.ok("delete");
     }
 
 }

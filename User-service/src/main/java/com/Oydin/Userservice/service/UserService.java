@@ -31,7 +31,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User getById(Integer userId){ return userRepository.getById(userId);
+    public User getById(Integer userId){ return userRepository.findById(userId).get();
     }
 
     public List<User> getAll(){
@@ -94,9 +94,9 @@ public class UserService {
 
         HttpEntity<Product> requestBody = new HttpEntity<>(updateInfo, headers);
 
-        restTemplate.exchange("http://localhost:4084/products/update", HttpMethod.PUT, requestBody, Product.class);
+        restTemplate.exchange("http://localhost:4084/products/", HttpMethod.PUT, requestBody, Product.class);
 
-        String resourceUrl = "http://localhost:4084/products/"  + updateInfo.getProductId();
+        String resourceUrl = "http://localhost:4084/products/update"  + updateInfo.getProductId();
         Product p = restTemplate.getForObject(resourceUrl, Product.class);
 
         vo.setProduct(p);
