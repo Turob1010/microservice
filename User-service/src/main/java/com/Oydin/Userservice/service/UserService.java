@@ -62,7 +62,7 @@ public class UserService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Product> requestBody = new HttpEntity<>(newProduct, headers);
-        Product product = restTemplate.postForObject("http://localhoct:4084/products/saveproduct",
+        Product product = restTemplate.postForObject("http://PRODUCT-SERVICE/products/saveproduct",
                 requestBody,
                 Product.class);
 
@@ -71,14 +71,14 @@ public class UserService {
     public ResponseTemplateVO getUserWithProduct(Integer userId){
 
         User user = userRepository.findByUserId(userId);
-        Product product = restTemplate.getForObject("http://localhost:4084/products/" + user.getProductId(),Product.class);
+        Product product = restTemplate.getForObject("http://PRODUCT-SERVICE/products/" + user.getProductId(),Product.class);
         vo.setUser(user);
         vo.setProduct(product);
         return vo;
     }
         public ResponseListTemplate  getAllUsersWithProducts(){
         List<User> users = userRepository.findAll();
-       String GET_ALL_PRODUCT =  "http://localhost:4084/products/getall";
+       String GET_ALL_PRODUCT =  "http://PRODUCT-SERVICE/products/getall";
     Product[] products = restTemplate.getForObject(GET_ALL_PRODUCT, Product[].class);
     voList.setUsers(users);
     voList.setProducts(List.of(products));
@@ -94,7 +94,7 @@ public class UserService {
 
         HttpEntity<Product> requestBody = new HttpEntity<>(updateInfo, headers);
 
-        restTemplate.exchange("http://localhost:4084/products/", HttpMethod.PUT, requestBody, Product.class);
+        restTemplate.exchange("http://PRODUCT-SERVICE/products/", HttpMethod.PUT, requestBody, Product.class);
 
         String resourceUrl = "http://localhost:4084/products/update"  + updateInfo.getProductId();
         Product p = restTemplate.getForObject(resourceUrl, Product.class);
