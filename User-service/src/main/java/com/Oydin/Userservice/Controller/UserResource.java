@@ -75,7 +75,7 @@ public class UserResource
     @DeleteMapping("/deleteuserandproduct/{userId}")
         public ResponseEntity deleteUserAndProduct(@PathVariable Integer userId){
         log.info("Inside deleteUserAndProduct method of UserResource");
-         userService.deleteUserAndProduct(userService.getById(userId));
+         userService.deleteUserAndProduct(userService.getUserWithProduct(userId));
            return  ResponseEntity.ok("delete");
     }
 

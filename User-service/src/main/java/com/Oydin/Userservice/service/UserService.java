@@ -87,27 +87,27 @@ public class UserService {
     return voList;
     }
 
-    public ResponseTemplateVO updateUserAndProduct(ResponseTemplateVO vo){
+    public ResponseTemplateVO updateUserAndProduct(ResponseTemplateVO templateVO){
         Product updateInfo = new Product();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
 
         HttpEntity<Product> requestBody = new HttpEntity<>(updateInfo, headers);
 
-        restTemplate.exchange("http://PRODUCT-SERVICE/products/", HttpMethod.PUT, requestBody, Product.class);
+        restTemplate.exchange("http://PRODUCT-SERVICE/products/update", HttpMethod.PUT, requestBody, Product.class);
 
-        String resourceUrl = "http://localhost:4084/products/update"  + updateInfo.getProductId();
+        String resourceUrl = "http://PRODUCT-SERVICE/products/"  + updateInfo.getProductId();
         Product p = restTemplate.getForObject(resourceUrl, Product.class);
 
         vo.setProduct(p);
 //
         return vo;
     }
-    public void  deleteUserAndProduct(User user){
+    public void   deleteUserAndProduct(ResponseTemplateVO templateVO){
+        User user = templateVO.getUser();
         userRepository.delete(user);
-        String productD = "http://localhost:4084/products/" + user.getProductId();
+        String productD = "http://PRODUCT-SERVICE/products/" + user.getProductId();
         restTemplate.delete(productD);
-
 
     }
 
