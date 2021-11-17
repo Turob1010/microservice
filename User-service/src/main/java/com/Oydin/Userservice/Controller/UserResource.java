@@ -44,6 +44,12 @@ public class UserResource
     }
 
     @GetMapping("/{userId}")
+    public User getByUserId(@PathVariable  Integer userId){
+        log.info("Inside getByUserId method of UserResource");
+        return userService.getById(userId);
+    }
+
+    @GetMapping("/getid/{userId}")
     public ResponseTemplateVO getUserWithProduct(@PathVariable  Integer userId){
         log.info("Inside getUserWithProduct method of UserResource");
         return userService.getUserWithProduct(userId);

@@ -42,6 +42,8 @@ public class UserService implements UserServiceInt {
     public User getById(Integer userId){ return userRepository.findById(userId).get();
     }
 
+
+
     public List<User> getAll(){
        List<User> users = userRepository.findAll();
        return users;

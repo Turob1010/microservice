@@ -17,5 +17,5 @@ eureka:
 data:
   exception:
     message1: UserResourceException
-    message2: NotFound this Id
+    message2: Not found User with id
     message3: DataConnectivityisLost
