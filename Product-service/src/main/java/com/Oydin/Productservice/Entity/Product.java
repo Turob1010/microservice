@@ -17,7 +17,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class Product implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer productId;
     private String productName;
     private Double price;
