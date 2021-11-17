@@ -45,6 +45,10 @@ public class UserService implements UserServiceInt {
             throw new UserNotFoundException();
         } else {
             user = userRepository.findById(userId).get();
+            user.setUserId(userDetails.getUserId());
+            user.setUserName(userDetails.getUserName());
+            user.setAge(userDetails.getAge());
+            user.setProductId(userDetails.getProductId());
             User updateUser = userRepository.save(user);
             return updateUser;
         }

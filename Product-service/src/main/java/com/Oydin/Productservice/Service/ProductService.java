@@ -35,6 +35,9 @@ public class ProductService implements ProductServiceInt{
             throw new ProductNotFoundException();
         } else {
             product = productRepository.findById(productId).get();
+            product.setProductId(productDetails.getProductId());
+            product.setProductName(productDetails.getProductName());
+            product.setPrice(productDetails.getPrice());
             Product updateProduct = productRepository.save(product);
             return updateProduct;
         }
