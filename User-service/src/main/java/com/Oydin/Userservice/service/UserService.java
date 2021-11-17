@@ -1,6 +1,8 @@
 package com.Oydin.Userservice.service;
 
 import com.Oydin.Userservice.Entity.User;
+import com.Oydin.Userservice.Exception.UserAlreadyExistsException;
+import com.Oydin.Userservice.Exception.UserNotFoundException;
 import com.Oydin.Userservice.Repository.UserRepository;
 import com.Oydin.Userservice.VO.Product;
 import com.Oydin.Userservice.VO.ResponseListTemplate;
@@ -13,8 +15,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
+
 @Service
-public class UserService {
+public class UserService implements UserServiceInt {
 
 
     @Autowired
@@ -23,12 +26,17 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-
+    User user = new User();
     ResponseTemplateVO vo = new ResponseTemplateVO();
     ResponseListTemplate voList = new ResponseListTemplate();
 
-    public User createUser (User user){
-        return userRepository.save(user);
+    @Override
+    public User createUser(User user) {
+        if (userRepository.existsById(user.getUserId())) {
+            throw new UserAlreadyExistsException();
+        }
+        User createUser = userRepository.save(user);
+        return createUser;
     }
 
     public User getById(Integer userId){ return userRepository.findById(userId).get();
@@ -39,16 +47,6 @@ public class UserService {
        return users;
     }
 
-
-    public User update (User user,Integer userId){
-         userRepository.findById(userId).get();
-        User user1 = userRepository.save(user);
-        user1.setUserId(user.getUserId());
-        user1.setUserName(user.getUserName());
-        user1.setAge(user.getAge());
-        user1.setProductId(user.getProductId());
-        return user1;
-    }
 
     public void  deleteUser(User user){
         userRepository.delete(user);
@@ -69,7 +67,6 @@ public class UserService {
         return new ResponseTemplateVO(user ,product);
     }
     public ResponseTemplateVO getUserWithProduct(Integer userId){
-
         User user = userRepository.findByUserId(userId);
         Product product = restTemplate.getForObject("http://PRODUCT-SERVICE/products/" + user.getProductId(),Product.class);
         vo.setUser(user);
@@ -87,7 +84,20 @@ public class UserService {
     return voList;
     }
 
+    @Override
+    public User updateUser(User userDetails,Integer userId) throws UserNotFoundException {
+        User user;
+        if (userRepository.findById(userId).isEmpty()) {
+            throw new UserNotFoundException();
+        } else {
+            user = userRepository.findById(userId).get();
+            User updateUser = userRepository.save(user);
+            return updateUser;
+        }
+    }
     public ResponseTemplateVO updateUserAndProduct(ResponseTemplateVO templateVO){
+
+        User user1= userRepository.save(user);
         Product updateInfo = new Product();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
@@ -98,16 +108,19 @@ public class UserService {
 
         String resourceUrl = "http://PRODUCT-SERVICE/products/"  + updateInfo.getProductId();
         Product p = restTemplate.getForObject(resourceUrl, Product.class);
-
-        vo.setProduct(p);
-//
-        return vo;
+        templateVO.setUser(user1);
+        templateVO.setProduct(p);
+        return templateVO;
     }
-    public void   deleteUserAndProduct(ResponseTemplateVO templateVO){
+    public ResponseTemplateVO   deleteUserAndProduct(ResponseTemplateVO templateVO){
         User user = templateVO.getUser();
         userRepository.delete(user);
         String productD = "http://PRODUCT-SERVICE/products/" + user.getProductId();
-        restTemplate.delete(productD);
+       restTemplate.delete(productD);
+        Product product = restTemplate.getForObject(productD, Product.class);
+        templateVO.setProduct(product);
+        templateVO.setUser(user);
+        return templateVO;
 
     }
 

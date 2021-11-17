@@ -1,10 +1,10 @@
 server:
   port: 4085
 
-
 spring:
   application:
     name: USER-SERVICE
+
 eureka:
   client:
     register-with-eureka: true
@@ -14,4 +14,8 @@ eureka:
   instance:
     hostname: localhost
 
-
+data:
+  exception:
+    message1: UserResourceException
+    message2: NotFound this Id
+    message3: DataConnectivityisLost
