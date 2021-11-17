@@ -1,7 +1,11 @@
 package com.Oydin.Productservice.Controller;
 import com.Oydin.Productservice.Entity.Product;
+import com.Oydin.Productservice.Exception.ProductAlreadyExistsException;
+import com.Oydin.Productservice.Exception.ProductNotFoundException;
 import com.Oydin.Productservice.Service.ProductService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,10 +24,15 @@ public class ProductResource {
         this.productService = productService;
     }
 
-    @PostMapping("/saveproduct")
-    public Product saveProduct(@RequestBody Product product) {
+    @PostMapping("/save")
+    public ResponseEntity saveProduct(@RequestBody Product product) throws ProductAlreadyExistsException {
         log.info("Inside saveProduct method of ProductResource");
-        return productService.createProduct(product);
+        Product saveProduct = productService.createProduct(product);
+        return new ResponseEntity<>(saveProduct, HttpStatus.CREATED);
+    }
+    @ExceptionHandler(value = ProductAlreadyExistsException.class)
+    public ResponseEntity handleProductAlreadyExistsException(ProductAlreadyExistsException productAlreadyExistsException) {
+        return new ResponseEntity("Product already exists :", HttpStatus.CONFLICT);
     }
 
     @GetMapping("/{productId}")
@@ -39,11 +48,11 @@ public class ProductResource {
     }
 
 
-    @PutMapping("/update")
-    public Product updateProduct(@RequestBody Product product) {
+    @PutMapping("/update/{productId}")
+    public Product updateProduct(@RequestBody Product productDetails, @PathVariable Integer productId) throws ProductNotFoundException {
         log.info("Inside updateProduct method of ProductResource");
-        Product product1 = productService.updateProduct(product);
-        return product1;
+        Product updateProduct = productService.updateProduct(productDetails,productId);
+        return updateProduct;
     }
 
     @DeleteMapping("/delete/{productId}")

@@ -38,6 +38,17 @@ public class UserService implements UserServiceInt {
         User createUser = userRepository.save(user);
         return createUser;
     }
+    @Override
+    public User updateUser(User userDetails,Integer userId) throws UserNotFoundException {
+        User user;
+        if (userRepository.findById(userId).isEmpty()) {
+            throw new UserNotFoundException();
+        } else {
+            user = userRepository.findById(userId).get();
+            User updateUser = userRepository.save(user);
+            return updateUser;
+        }
+    }
 
     public User getById(Integer userId){ return userRepository.findById(userId).get();
     }
@@ -86,17 +97,7 @@ public class UserService implements UserServiceInt {
     return voList;
     }
 
-    @Override
-    public User updateUser(User userDetails,Integer userId) throws UserNotFoundException {
-        User user;
-        if (userRepository.findById(userId).isEmpty()) {
-            throw new UserNotFoundException();
-        } else {
-            user = userRepository.findById(userId).get();
-            User updateUser = userRepository.save(user);
-            return updateUser;
-        }
-    }
+
     public ResponseTemplateVO updateUserAndProduct(ResponseTemplateVO templateVO){
 
         User user1= userRepository.save(user);
